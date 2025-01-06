@@ -1,0 +1,63 @@
+[
+    {
+      "Title": "Inception",
+      "Plot": "A thief who steals corporate secrets through the use of dream-sharing technology.",
+      "Poster": "https://image.tmdb.org/t/p/w500//qJ2tW6WMUDux911r6m7haRef0WH.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "The Dark Knight",
+      "Plot": "Batman raises the stakes in his war on crime.",
+      "Poster": "https://image.tmdb.org/t/p/w500//1hRoyzDtpgMU7Dz4JF22RANzQO7.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "Interstellar",
+      "Plot": "A team of explorers travel through a wormhole in space in an attempt to save humanity.",
+      "Poster": "https://image.tmdb.org/t/p/w500//gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "The Matrix",
+      "Plot": "A hacker discovers the shocking truth about his reality.",
+      "Poster": "https://image.tmdb.org/t/p/w500//f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "Avatar",
+      "Plot": "A paraplegic Marine is dispatched to Pandora on a unique mission.",
+      "Poster": "https://image.tmdb.org/t/p/w500//6EiRUJpuoeQPghrs3YNktfnqOVh.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "The Shawshank Redemption",
+      "Plot": "Two imprisoned men bond over a number of years, finding solace and redemption.",
+      "Poster": "https://image.tmdb.org/t/p/w500//q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "Pulp Fiction",
+      "Plot": "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine.",
+      "Poster": "https://image.tmdb.org/t/p/w500//d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+      "ReleaseDate":"15th November 2003"
+    },
+    {
+      "Title": "Forrest Gump",
+      "Plot": "The presidencies of Kennedy and Johnson, the Vietnam War, and more from the perspective of a man with an IQ of 75.",
+      "Poster": "https://image.tmdb.org/t/p/w500//clolk7rB5lAjs41SD0Vt6IXYLMm.jpg",
+      "ReleaseDate":"4th August 1997"
+    },
+    {
+      "Title": "Gladiator",
+      "Plot": "A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family.",
+      "Poster": "https://image.tmdb.org/t/p/w500//ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg",
+      "ReleaseDate":"2nd July 2002"
+    },
+    {
+      "Title": "The Godfather",
+      "Plot": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+      "Poster": "https://image.tmdb.org/t/p/w500//3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+      "ReleaseDate":"10th July 2012"
+    }
+  ]
+  

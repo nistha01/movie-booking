@@ -1,0 +1,44 @@
+/* src/components/Poster.css */
+.poster-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .poster-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .poster-item {
+    min-width: 100%; /* Each poster takes full width of the container */
+    height: 400px; /* Adjust height as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .poster-img {
+    width: 60%; /* Adjust width for the poster image */
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px; /* Rounded corners */
+  }
+  
+  .poster-details {
+    position: absolute;
+    bottom: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-align: center;
+  }
+  
+  .poster-item:hover .poster-details {
+    opacity: 1;
+  }
+  
