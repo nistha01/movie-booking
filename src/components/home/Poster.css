@@ -21,8 +21,8 @@
   }
   
   .poster-img {
-    width: 60%; /* Adjust width for the poster image */
-    height: 100%;
+    width: 100%; /* Adjust width for the poster image */
+    height: 2000px;
     object-fit: cover;
     border-radius: 10px; /* Rounded corners */
   }

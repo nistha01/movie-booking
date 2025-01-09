@@ -1,0 +1,47 @@
+/* General Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  /* Logo Styles */
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style:obique;
+    color: #e7e710;
+  }
+  
+  /* Navigation Styles */
+  .nav ul {
+    list-style: none;
+    display: flex;
+    gap: 50px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav li {
+    margin: 0;
+  }
+  
+  .nav a {
+    color: #f5c518;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .nav a:hover {
+    color: #fff;
+  }
+  

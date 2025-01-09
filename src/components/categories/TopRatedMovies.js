@@ -1,83 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./TopRatedMovies.css";
 
 const TopRatedMovies = () => {
   const [movies, setMovies] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false); 
-
-  
-
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    // Fetch the JSON file
+    // Fetch movies from the public folder
     fetch("/now-playing.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch movies");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setMovies(data); 
-      })
-      .catch((error) => {
-        console.error("Error fetching movie data:", error);
-      });
+      .then((response) => response.json())
+      .then((data) => setMovies(data))
+      .catch((error) => console.error("Error fetching movies:", error));
   }, []);
 
+  const scrollCarousel = (direction) => {
+    const container = document.getElementById("carousel");
+    const scrollAmount = container.offsetWidth;
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? movies.length - 1 : prevIndex - 1
-    );
+    if (direction === "left") {
+      container.scrollLeft -= scrollAmount;
+    } else {
+      container.scrollLeft += scrollAmount;
+    }
+    setScrollPosition(container.scrollLeft);
   };
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  if (loading) {
-    return <div className="loading">Loading movies...</div>;
-  }
 
   return (
-    <div className="movie-slider">
-      <h2 className="slider-title">Top movies in theatres</h2>
-      <div className="slider-container">
-        <button className="nav-button prev-button" onClick={handlePrev}>
-          &larr;
+    <div className="movie-section">
+      <h1>Top Rated Movies</h1>
+      <div className="carousel-container">
+        <button
+          className={`arrow left ${scrollPosition === 0 ? "hidden" : ""}`}
+          onClick={() => scrollCarousel("left")}
+        >
+          &#8249;
         </button>
-        <div className="slider-wrapper">
+        <div className="movies-carousel" id="carousel">
           {movies.map((movie, index) => (
-            <div
-              key={index}
-              className={`slider-item ${
-                index === currentIndex ? "active" : ""
-              }`}
-            >
+            <div className="movie-card" key={index}>
               <img
-                src={movie.poster}
-                alt={movie.title}
+                src={movie.Poster}
+                alt={movie.Title}
                 className="movie-poster"
               />
-              {index === currentIndex && (
-                <div className="movie-info">
-                  <h3>{movie.title}</h3>
-                  <p>Release: {movie.releaseDate}</p>
-                  <div className="movie-actions">
-                    <button>Trailer</button>
-                    <button>Detail</button>
-                  </div>
+              <div className="movie-info">
+                <h2>{movie.Title}</h2>
+                <p>{movie.Plot}</p>
+                <div className="buttons">
+                  <button className="trailer-btn">Trailer</button>
+                  <button className="details-btn">Details</button>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
-        <button className="nav-button next-button" onClick={handleNext}>
-          &rarr;
+        <button
+          className="arrow right"
+          onClick={() => scrollCarousel("right")}
+        >
+          &#8250;
         </button>
       </div>
     </div>

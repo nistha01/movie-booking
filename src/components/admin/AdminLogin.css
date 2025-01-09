@@ -1,0 +1,86 @@
+.admin-container {
+  padding: 30px;
+  color: #fff;
+  background-color: rgba(18, 18, 18, 0.88);
+  height: 500px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.grid-form input,
+.grid-form select {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.grid-form input::placeholder,
+.grid-form select {
+  color: #ddd;
+}
+
+.grid-form input:focus {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.grid-form button {
+  grid-column: span 2;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.grid-form button:hover {
+  background: #45a049;
+}
+
+.toggle-links {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.toggle-links p {
+  cursor: pointer;
+  color: #4caf50;
+  transition: color 0.3s ease;
+}
+
+.toggle-links p:hover {
+  color: #45a049;
+}
+
+.back-button {
+  grid-column: span 2;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #555;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background: #444;
+}
+
