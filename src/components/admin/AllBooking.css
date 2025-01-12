@@ -1,0 +1,56 @@
+/* MovieBookings.css */
+.movie-booking-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .movie-booking-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .booking-item {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .booking-item h3 {
+    font-size: 1.5rem;
+    color: #007bff;
+  }
+  
+  .booking-item p {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  
+  .booking-item p strong {
+    font-weight: bold;
+  }
+  
+  .loading-message {
+    font-size: 1.2rem;
+    color: #007bff;
+  }
+  
+  .no-bookings-message {
+    font-size: 1.2rem;
+    color: #e74c3c;
+  }
+  
+  @media (max-width: 768px) {
+    .movie-booking-container {
+      padding: 15px;
+    }
+  
+    .booking-item {
+      padding: 12px;
+    }
+  }
+  

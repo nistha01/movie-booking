@@ -5,7 +5,7 @@ const NowPlaying = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    // Fetch the JSON file
+    
     fetch("/now-playing.json")
       .then((response) => {
         if (!response.ok) {
@@ -14,7 +14,7 @@ const NowPlaying = () => {
         return response.json();
       })
       .then((data) => {
-        setMovies(data); // Set the fetched data into state
+        setMovies(data);
       })
       .catch((error) => {
         console.error("Error fetching movie data:", error);
@@ -29,9 +29,8 @@ const NowPlaying = () => {
       <div className="now-playing-container">
         {movies.map((movie, index) => (
           <div key={index} className="movie-card-container">
-            {/* Movie Poster Card */}
             <div className="movie-card">
-              <img src={movie.Poster} alt={movie.Title} className="poster" />
+              <img src={movie.poster_url} alt={movie.Title} className="poster" />
               <div className="details-overlay">
                 <p>Genre: {movie.Genre}</p>
                 <p>Duration: {movie.Duration}</p>
@@ -41,8 +40,8 @@ const NowPlaying = () => {
 
             {/* Title and Release Date */}
             <div className="movie-details">
-              <h3 className="movie-title">{movie.Title}</h3>
-              <p className="release-date">Release: {movie.ReleaseDate}</p>
+              <h3 className="movie-title">{movie.name}</h3>
+              <p className="release-date">Release: {movie.release_date}</p>
             </div>
           </div>
         ))}

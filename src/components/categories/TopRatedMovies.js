@@ -6,7 +6,7 @@ const TopRatedMovies = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    // Fetch movies from the public folder
+    
     fetch("/now-playing.json")
       .then((response) => response.json())
       .then((data) => setMovies(data))

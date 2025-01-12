@@ -12,8 +12,8 @@
   }
   
   .poster-item {
-    min-width: 100%; /* Each poster takes full width of the container */
-    height: 400px; /* Adjust height as needed */
+    min-width: 100%;
+    height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,10 +21,10 @@
   }
   
   .poster-img {
-    width: 100%; /* Adjust width for the poster image */
-    height: 2000px;
+    width: 100%; 
+    height: 550px;
     object-fit: cover;
-    border-radius: 10px; /* Rounded corners */
+    border-radius: 10px;
   }
   
   .poster-details {

@@ -1,36 +1,159 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./AdminHome.css";
+import { ref, set, onValue } from "firebase/database";
+import { database } from "../database/DatabaseConf";
 
 const AdminHome = () => {
-  // State for toggling dropdowns
+  const [screens, setScreens] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [showtimes, setShowtimes] = useState({});
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [screensOpen, setScreensOpen] = useState(false);
-  const [showScreenOptions, setShowScreenOptions] = useState(false); // State for showing add/remove screen options
-  const [newScreenName, setNewScreenName] = useState(""); // State for new screen name
-  const [screens, setScreens] = useState(["Screen 1", "Screen 2", "Screen 3", "Screen 4"]); // State for screens
-  const [removeScreen, setRemoveScreen] = useState(""); // State for selected screen to remove
+  const [modalType, setModalType] = useState(null);
+  const [newItemName, setNewItemName] = useState("");
+  const [selectedItemToRemove, setSelectedItemToRemove] = useState("");
+  const [newMovie, setNewMovie] = useState({
+    name: "",
+    releaseDate: "",
+    category: "",
+    type: "",
+    genre: "",
+    director: "",
+    actor: "",
+    language: "",
+    imdbRating: "",
+    showtime: "",
+    trailerLink: "",
+    poster_url: "",
+    description: "",
+    screen: "",
+  });
 
-  // Toggle functions
-  const toggleCategories = () => setCategoriesOpen(!categoriesOpen);
-  const toggleScreens = () => setScreensOpen(!screensOpen);
-  const toggleScreenOptions = () => setShowScreenOptions(!showScreenOptions); // Toggle screen options
+  const database1 = database;
 
-  // Handle adding a new screen
-  const handleAddScreen = () => {
-    if (newScreenName) {
-      setScreens([...screens, newScreenName]);
-      setNewScreenName(""); // Reset input field after adding screen
-      setShowScreenOptions(false); // Hide the options
-    }
+  // Fetch data from Firebase
+  useEffect(() => {
+    const screensRef = ref(database1, "screens");
+    const categoriesRef = ref(database1, "categories");
+    const moviesRef = ref(database1, "movies");
+
+    onValue(screensRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const screenList = Object.values(data); // Extract screen objects
+        setScreens(screenList);
+
+        // Fetch showtimes for each screen
+        const screenShowtimes = {};
+        screenList.forEach((screen) => {
+          if (screen.name) {
+            screenShowtimes[screen.name] = screen.showtimes ? Object.values(screen.showtimes) : [];
+          }
+        });
+
+        setShowtimes(screenShowtimes);
+        console.log(screenShowtimes[newMovie.screen]); // Log showtimes for the selected screen
+      }
+    });
+
+    onValue(categoriesRef, (snapshot) => {
+      const data = snapshot.val();
+      setCategories(data ? Object.values(data) : []);
+    });
+
+    onValue(moviesRef, (snapshot) => {
+      const data = snapshot.val();
+      setMovies(data ? Object.values(data) : []);
+    });
+  }, [database1]);
+
+  // Save data to Firebase
+  const saveToDatabase = (key, items) => {
+    const dbRef = ref(database1, key);
+    set(dbRef, items.reduce((acc, item, index) => ({ ...acc, [index]: item }), {}));
   };
 
-  // Handle removing a screen
-  const handleRemoveScreen = () => {
-    if (removeScreen) {
-      setScreens(screens.filter(screen => screen !== removeScreen));
-      setRemoveScreen(""); // Reset the selection after removing
-      setShowScreenOptions(false); // Hide options
+  // Toggle dropdowns
+  const toggleCategories = () => setCategoriesOpen(!categoriesOpen);
+  const toggleScreens = () => setScreensOpen(!screensOpen);
+
+  const handleClick = (event) => {
+    toggleScreens();
+  };
+
+  const handleAddItem = () => {
+    if (!newItemName) return;
+
+    if (modalType === "screens") {
+      const updatedScreens = [...screens, { name: newItemName }];
+      setScreens(updatedScreens);
+      saveToDatabase("screens", updatedScreens);
     }
+
+    if (modalType === "categories") {
+      const updatedCategories = [...categories, newItemName];
+      setCategories(updatedCategories);
+      saveToDatabase("categories", updatedCategories);
+    }
+
+    setNewItemName("");
+  };
+
+  // Remove an item
+  const handleRemoveItem = () => {
+    if (!selectedItemToRemove) return;
+
+    if (modalType === "screens") {
+      const updatedScreens = screens.filter((screen) => screen.name !== selectedItemToRemove);
+      setScreens(updatedScreens);
+      saveToDatabase("screens", updatedScreens);
+    }
+
+    if (modalType === "categories") {
+      const updatedMovies = movies.filter((movie) => movie.category !== selectedItemToRemove);
+      const updatedCategories = categories.filter((cat) => cat !== selectedItemToRemove);
+      setCategories(updatedCategories);
+      setMovies(updatedMovies);
+      saveToDatabase("categories", updatedCategories);
+      saveToDatabase("movies", updatedMovies);
+    }
+
+    setSelectedItemToRemove("");
+  };
+
+  // Add a new movie
+  const handleAddMovie = () => {
+    if (Object.values(newMovie).some((val) => !val)) return;
+
+    // Add the screen and showtime for "Now Playing" category
+    if (newMovie.category === "Now Playing" && !newMovie.screen && !newMovie.showtime) {
+      return; // Prevent adding the movie if these fields are empty for "Now Playing"
+    }
+
+    const updatedMovies = [...movies, newMovie];
+    setMovies(updatedMovies);
+    saveToDatabase("movies", updatedMovies);
+
+    setNewMovie({
+      name: "",
+      releaseDate: "",
+      category: "",
+      type: "",
+      genre: "",
+      director: "",
+      actor: "",
+      language: "",
+      imdbRating: "",
+      showtime: "",
+      trailerLink: "",
+      poster_url: "",
+      description: "",
+      screen: "", // Add this to the newMovie object
+    });
+
+    setModalType(null);
   };
 
   return (
@@ -38,93 +161,218 @@ const AdminHome = () => {
       {/* Side Navigation Bar */}
       <div className="side-nav">
         <div className="nav-section">
-          <h2>All Movies</h2>
-        </div>
-        <div className="nav-section">
           <h2 onClick={toggleCategories}>Categories</h2>
-          {/* Categories dropdown */}
           <ul className={categoriesOpen ? "open" : ""}>
-            <li>Playing Now</li>
-            <li>Top Rated</li>
-            <li>Best Movies</li>
+            {categories.length > 0 ? (
+              categories.map((category, index) => <li key={index}>{category}</li>)
+            ) : (
+              <li>No Categories Available</li>
+            )}
           </ul>
         </div>
         <div className="nav-section">
-          <h2>All Bookings</h2>
-        </div>
-        <div className="nav-section">
-          <h2 onClick={toggleScreens}>Screens</h2>
-          {/* Screens dropdown */}
+          <Link to="/admin-screens" onClick={handleClick} style={{ textDecoration: "none", color: "white" }}>
+            <h2 style={{ cursor: "pointer", color: "white" }}>Screens</h2>
+          </Link>
           <ul className={screensOpen ? "open" : ""}>
-            {screens.map((screen, index) => (
-              <li key={index}>{screen}</li>
-            ))}
+            {screens.length > 0 ? (
+              screens.map((screen, index) => <li key={index}>{screen.name}</li>)
+            ) : (
+              <li>No Screens Available</li>
+            )}
           </ul>
+        </div>
+        <div className="nav-section">
+        <Link to="/all-bookings" onClick={handleClick} style={{ textDecoration: "none", color: "white" }}>
+            <h2 style={{ cursor: "pointer", color: "white" }}>All Bookings</h2>
+          </Link>
+
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className="main-content">
         <h1>Welcome to Admin Dashboard</h1>
-        <p>Manage Movies, Bookings, and Screens from here</p>
 
-        {/* Example of additional content */}
         <div className="content-cards">
-          <div className="card">
-            <h3>Manage Movies</h3>
-            <p>View, add, or update movie details.</p>
-          </div>
-          <div className="card" onClick={toggleScreenOptions}>
+          <div className="card" onClick={() => setModalType("screens")}>
             <h3>Manage Screens</h3>
-            <p>Assign movies to screens and showtimes.</p>
+            <h4>Add or Remove Screens</h4>
           </div>
-          
+          <div className="card" onClick={() => setModalType("categories")}>
+            <h3>Manage Categories</h3>
+            <h4>Add or Remove Categories</h4>
+          </div>
+          <div className="card" onClick={() => setModalType("movies")}>
+            <h3>Manage Movies</h3>
+            <h4>Add or Remove Movies</h4>
+          </div>
         </div>
-        <div className="content-cards">
-         
-          <div className="card">
-            <h3>Manage Bookings</h3>
-            <p>View and manage customer bookings.</p>
-          </div>
-          <div className="card" >
-            <h3>Manage Category</h3>
-            <p>Assign movies to screens and showtimes.</p>
-          </div>
-        
-        </div>
-
-        {/* Show options for adding/removing screens */}
-        {showScreenOptions && (
-          <div className="screen-options">
-            <button onClick={handleAddScreen}>Add Screen</button>
-            <button onClick={handleRemoveScreen}>Remove Screen</button>
-          </div>
-        )}
-
-        {/* Input field for adding a new screen */}
-        {showScreenOptions && (
-          <div className="add-screen-input">
-            <input
-              type="text"
-              placeholder="Enter new screen name"
-              value={newScreenName}
-              onChange={(e) => setNewScreenName(e.target.value)}
-            />
-          </div>
-        )}
-
-        {/* Dropdown for removing a screen */}
-        {showScreenOptions && removeScreen === "" && (
-          <div className="remove-screen-select">
-            <select onChange={(e) => setRemoveScreen(e.target.value)} value={removeScreen}>
-              <option value="">Select screen to remove</option>
-              {screens.map((screen, index) => (
-                <option key={index} value={screen}>{screen}</option>
-              ))}
-            </select>
-          </div>
-        )}
       </div>
+
+      {/* Modal for Managing Screens, Categories, and Movies */}
+      {modalType && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Manage {modalType}</h2>
+            {modalType === "movies" ? (
+              <>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={newMovie.name}
+                  onChange={(e) => setNewMovie({ ...newMovie, name: e.target.value })}
+                />
+                <textarea
+                  placeholder="Description"
+                  value={newMovie.description}
+                  onChange={(e) => setNewMovie({ ...newMovie, description: e.target.value })}
+                />
+                <input
+                  type="date"
+                  placeholder="Release Date"
+                  value={newMovie.releaseDate}
+                  onChange={(e) => setNewMovie({ ...newMovie, releaseDate: e.target.value })}
+                />
+                <select
+                  value={newMovie.category}
+                  onChange={(e) => setNewMovie({ ...newMovie, category: e.target.value })}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat, index) => (
+                    <option key={index} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                {newMovie.category === "Now Playing" && (
+                  <>
+                    {/* Screen Selection (multiple) */}
+                    <select
+                      value={newMovie.screen}
+                      onChange={(e) => setNewMovie({ ...newMovie, screen: Array.from(e.target.selectedOptions, option => option.value) })}
+                      multiple
+                    >
+                      <option value="">Select Screen</option>
+                      {screens.map((screen, index) => (
+                        <option key={index} value={screen.name}>
+                          {screen.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Showtime Selection with Checkboxes */}
+                    {newMovie.screen.length > 0 && showtimes && showtimes[newMovie.screen] && Array.isArray(showtimes[newMovie.screen]) ? (
+                      <div>
+                        <p>Select Showtime(s):</p>
+                        {showtimes[newMovie.screen].map((time, index) => (
+                          <div key={index} className="checkbox-container">
+                            <input
+                              type="checkbox"
+                              id={`showtime-${index}`}
+                              value={`${time.day}: ${time.timeFrom} - ${time.timeTo}`}
+                              checked={newMovie.showtime.includes(`${time.day}: ${time.timeFrom} - ${time.timeTo}`)}
+                              onChange={(e) => {
+                                const selectedShowtimes = e.target.checked
+                                  ? [...newMovie.showtime, e.target.value]
+                                  : newMovie.showtime.filter(showtime => showtime !== e.target.value);
+                                setNewMovie({ ...newMovie, showtime: selectedShowtimes });
+                              }}
+                            />
+                            <label htmlFor={`showtime-${index}`}>
+                              {time.day}: {time.timeFrom} - {time.timeTo}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>No showtimes available for the selected screen.</p>
+                    )}
+                  </>
+                )}
+
+                <input
+                  type="text"
+                  placeholder="Type"
+                  value={newMovie.type}
+                  onChange={(e) => setNewMovie({ ...newMovie, type: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Genre"
+                  value={newMovie.genre}
+                  onChange={(e) => setNewMovie({ ...newMovie, genre: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Director"
+                  value={newMovie.director}
+                  onChange={(e) => setNewMovie({ ...newMovie, director: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Actor"
+                  value={newMovie.actor}
+                  onChange={(e) => setNewMovie({ ...newMovie, actor: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Language"
+                  value={newMovie.language}
+                  onChange={(e) => setNewMovie({ ...newMovie, language: e.target.value })}
+                />
+                <input
+                  type="number"
+                  placeholder="IMDB Rating"
+                  value={newMovie.imdbRating}
+                  onChange={(e) => setNewMovie({ ...newMovie, imdbRating: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Trailer Link"
+                  value={newMovie.trailerLink}
+                  onChange={(e) => setNewMovie({ ...newMovie, trailerLink: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Poster URL"
+                  value={newMovie.poster_url}
+                  onChange={(e) => setNewMovie({ ...newMovie, poster_url: e.target.value })}
+                />
+                <button onClick={handleAddMovie}>Save Movie</button>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={newItemName}
+                  onChange={(e) => setNewItemName(e.target.value)}
+                />
+                <button onClick={handleAddItem}>Add {modalType}</button>
+                <select
+                  value={selectedItemToRemove}
+                  onChange={(e) => setSelectedItemToRemove(e.target.value)}
+                >
+                  <option value="">Select {modalType} to Remove</option>
+                  {modalType === "screens" && screens.map((screen, index) => (
+                    <option key={index} value={screen.name}>
+                      {screen.name}
+                    </option>
+                  ))}
+                  {modalType === "categories" && categories.map((category, index) => (
+                    <option key={index} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+                <button onClick={handleRemoveItem}>Remove {modalType}</button>
+              </>
+            )}
+            <button onClick={() => setModalType(null)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

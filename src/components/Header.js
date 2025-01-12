@@ -15,8 +15,12 @@ const Header = () => {
             <Link to="/now-playing">Now Playing</Link>
           </li>
           <li>
+            <Link to="/ticket-booking">Book Ticket</Link>
+          </li>
+          <li>
             <Link to="/admin-login">Admin Login</Link>
           </li>
+  
         </ul>
       </nav>
     </header>
