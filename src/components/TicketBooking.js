@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, push, get, query, orderByChild, equalTo } from "firebase/database";
-import "./TicketBooking.css"; // Import the scoped CSS file
+import "./TicketBooking.css";
+import emailjs from 'emailjs-com';
 
 const TicketBooking = () => {
-    const [currentView, setCurrentView] = useState("menu"); // Tracks current view (menu, book, show)
+    const [currentView, setCurrentView] = useState("menu");
     const [userDetails, setUserDetails] = useState({
         name: "",
         lastName: "",
@@ -15,9 +16,48 @@ const TicketBooking = () => {
     const [movies, setMovies] = useState([]);
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [selectedTiming, setSelectedTiming] = useState("");
-    const [dobEmail, setDobEmail] = useState({ dob: "", email: "" }); // For retrieving tickets
-    const [userTickets, setUserTickets] = useState([]); // Retrieved tickets
+    const [dobEmail, setDobEmail] = useState({ dob: "", email: "" });
+    const [userTickets, setUserTickets] = useState([]);
     const [numberOfTickets, setNumberOfTickets] = useState(1);
+
+    // Send email function
+    const sendEmail = async (userDetails, selectedMovie, selectedTiming, numberOfTickets) => {
+        const message = `
+            Dear ${userDetails.name},
+
+            Thank you for booking your movie ticket with us!
+
+            Movie Name: ${selectedMovie.name}
+            Movie Description: ${selectedMovie.description || "No description available"}
+            Showtime: ${selectedTiming}
+            Number of Tickets: ${numberOfTickets}
+            Date: ${new Date().toLocaleDateString()}
+
+            We hope you enjoy the movie!
+
+            Best Regards,
+            Movie Booking Team
+        `;
+
+        const templateParams = {
+            from_name: userDetails.name,
+            to_email: userDetails.email, // Use the email from the form input
+            message: message, // Movie booking details wrapped in message
+        };
+
+        try {
+            const response = await emailjs.send(
+                'service_jl6efbg',       // Your Service ID
+                'template_kvipexe',      // Your Template ID
+                templateParams,          // Email content (name, message, etc.)
+                'SbbFOPagbp9VIbgHj'      // Your User ID
+            );
+        
+            console.log('Email sent successfully:', response);
+        } catch (error) {
+            console.error('Error sending email:', error);
+        }
+    };
 
     // Fetch movies on component mount
     useEffect(() => {
@@ -59,7 +99,8 @@ const TicketBooking = () => {
 
     // Submit ticket booking form
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form submission
+        
         if (!selectedMovie || !selectedTiming) {
             alert("Please select a movie and timing.");
             return;
@@ -69,12 +110,18 @@ const TicketBooking = () => {
             ...userDetails,
             movie: selectedMovie.name,
             timing: selectedTiming,
+            numberOfTickets, // Add number of tickets to the ticket data
         };
 
         try {
             const db = getDatabase();
             await push(ref(db, "users"), ticketData);
             alert("Ticket booked successfully!");
+
+            // Send the email after booking the ticket
+            sendEmail(userDetails, selectedMovie, selectedTiming, numberOfTickets);
+
+            // Reset form state
             setUserDetails({
                 name: "",
                 lastName: "",
@@ -136,15 +183,18 @@ const TicketBooking = () => {
         }
     };
 
-
     return (
         <div className="ticket-booking-container">
             <h2>Movie Ticket Booking Counter</h2>
 
             {currentView === "menu" && (
                 <div>
-                    <button onClick={() => setCurrentView("book")}>Book Tickets</button>
-                    <button onClick={() => setCurrentView("show")}>Show My Tickets</button>
+                    <button
+                        style={{ marginLeft: "220px" }}
+                        onClick={() => setCurrentView("book")}
+                    >
+                        Book Tickets
+                    </button>
                 </div>
             )}
 
@@ -235,7 +285,6 @@ const TicketBooking = () => {
                                 ))}
                             </select>
                         </label>
-
                     )}
                     <div className="ticket-selection">
                         <label>
@@ -254,50 +303,6 @@ const TicketBooking = () => {
                         Back to Menu
                     </button>
                 </form>
-            )}
-
-            {currentView === "show" && (
-                <form onSubmit={handleRetrieveTickets}>
-                    <label>
-                        Date of Birth:
-                        <input
-                            type="date"
-                            name="dob"
-                            value={dobEmail.dob}
-                            onChange={(e) => setDobEmail({ ...dobEmail, dob: e.target.value })}
-                            required
-                        />
-                    </label>
-                    <label>
-                        Email:
-                        <input
-                            type="email"
-                            name="email"
-                            value={dobEmail.email}
-                            onChange={(e) =>
-                                setDobEmail({ ...dobEmail, email: e.target.value })
-                            }
-                            required
-                        />
-                    </label>
-                    <button type="submit">Find Tickets</button>
-                    <button type="button" onClick={() => setCurrentView("menu")}>
-                        Back to Menu
-                    </button>
-                </form>
-            )}
-
-            {userTickets.length > 0 && (
-                <div>
-                    <h3>Your Tickets:</h3>
-                    <ul>
-                        {userTickets.map((ticket, index) => (
-                            <li key={index}>
-                                Movie: {ticket.movie}, Timing: {ticket.timing}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             )}
         </div>
     );

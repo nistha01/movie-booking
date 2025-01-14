@@ -58,7 +58,7 @@
 .main-content h1 {
   margin-bottom: 20px;
   font-size: 24px;
-  color: #495057;
+  color: #7497ba;
 }
 
 .content-cards {
@@ -188,6 +188,23 @@
 
 .checkbox-container input[type="checkbox"] {
   margin: 0; /* Remove default spacing for checkboxes */
+}
+.logout-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #f44336; /* Red color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f; /* Darker red on hover */
 }
 
 

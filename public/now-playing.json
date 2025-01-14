@@ -24,7 +24,7 @@
     "poster_url": "https://upload.wikimedia.org/wikipedia/en/a/af/The_Godfather%2C_The_Game.jpg"
   },
   {
-    "name": "Inception",
+    "name": "Matrix",
     "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
     "director": "Christopher Nolan",
     "genre": "Action, Sci-Fi, Thriller",
@@ -33,7 +33,7 @@
     "imdb_rating": 8.8,
     "showtime": "N/A",
     "trailer_link": "https://www.youtube.com/watch?v=8hP9D6kZseM",
-    "poster_url": "https://upload.wikimedia.org/wikipedia/en/7/7f/Inception_ver3.jpg"
+    "poster_url": "https://image.tmdb.org/t/p/w500//f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg"
   },
   {
     "name": "Pulp Fiction",
@@ -45,7 +45,7 @@
     "imdb_rating": 8.9,
     "showtime": "N/A",
     "trailer_link": "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
-    "poster_url": "https://upload.wikimedia.org/wikipedia/en/8/82/Pulp_Fiction_cover.jpg"
+    "poster_url": "https://m.media-amazon.com/images/I/71c05lTE03L._AC_SY679_.jpg"
   },
   {
     "name": "The Dark Knight",
@@ -57,7 +57,7 @@
     "imdb_rating": 9.0,
     "showtime": "N/A",
     "trailer_link": "https://www.youtube.com/watch?v=EXeTwQWrcwY",
-    "poster_url": "https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight.jpg"
+    "poster_url": "https://www.themoviedb.org/t/p/original/1hRoyzDtpgMU7Dz4JF22RANzQO7.jpg"
   },
   {
     "name": "Fight Club",

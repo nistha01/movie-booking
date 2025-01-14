@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext"; 
 import { Link } from "react-router-dom";
 import "./AdminHome.css";
 import { ref, set, onValue } from "firebase/database";
 import { database } from "../database/DatabaseConf";
 
 const AdminHome = () => {
+  const { logout } = useAuth();
   const [screens, setScreens] = useState([]);
   const [categories, setCategories] = useState([]);
   const [movies, setMovies] = useState([]);
@@ -74,6 +76,10 @@ const AdminHome = () => {
     const dbRef = ref(database1, key);
     set(dbRef, items.reduce((acc, item, index) => ({ ...acc, [index]: item }), {}));
   };
+  //logout function
+  const logoutt=()=>{
+    logout();
+  }
 
   // Toggle dropdowns
   const toggleCategories = () => setCategoriesOpen(!categoriesOpen);
@@ -99,6 +105,7 @@ const AdminHome = () => {
     }
 
     setNewItemName("");
+    setModalType(null);
   };
 
   // Remove an item
@@ -150,7 +157,7 @@ const AdminHome = () => {
       trailerLink: "",
       poster_url: "",
       description: "",
-      screen: "", // Add this to the newMovie object
+      screen: "", 
     });
 
     setModalType(null);
@@ -158,7 +165,6 @@ const AdminHome = () => {
 
   return (
     <div className="admin-home-container">
-      {/* Side Navigation Bar */}
       <div className="side-nav">
         <div className="nav-section">
           <h2 onClick={toggleCategories}>Categories</h2>
@@ -188,6 +194,7 @@ const AdminHome = () => {
           </Link>
 
         </div>
+        <button className="logout-button" onClick={logoutt}>Logout</button>
       </div>
 
       {/* Main Content Area */}

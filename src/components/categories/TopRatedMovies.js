@@ -39,12 +39,12 @@ const TopRatedMovies = () => {
           {movies.map((movie, index) => (
             <div className="movie-card" key={index}>
               <img
-                src={movie.Poster}
-                alt={movie.Title}
+                src={movie.poster_url}
+                alt={movie.nmae}
                 className="movie-poster"
               />
               <div className="movie-info">
-                <h2>{movie.Title}</h2>
+                <h2>{movie.name}</h2>
                 <p>{movie.Plot}</p>
                 <div className="buttons">
                   <button className="trailer-btn">Trailer</button>

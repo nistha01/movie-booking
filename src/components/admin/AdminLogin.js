@@ -104,7 +104,7 @@ const AdminLogin = () => {
 
   return (
     <div className="admin-container">
-      <h1>{isForgotPassword ? "Forgot Password" : isSignup ? "Sign Up" : "Admin Login"}</h1>
+      <h1 style={{color:"white"}}>{isForgotPassword ? "Forgot Password" : isSignup ? "Sign Up" : "Admin Login"}</h1>
       <form className="grid-form" onSubmit={handleSubmit}>
         {!isForgotPassword && (
           <>

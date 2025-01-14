@@ -9,7 +9,7 @@
   
   h1 {
     text-align: center;
-    color: #333;
+    color: #0a0909;
   }
   
   .add-section
@@ -127,7 +127,7 @@
   }
   
   .showtimes-list {
-    max-height: 120px;
+    max-height: 170px;
     overflow-y: auto;
     list-style: none;
     padding: 0;
